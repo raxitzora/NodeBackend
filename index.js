@@ -13,8 +13,12 @@ app.get("/api/data",(req,res)=>{
     res.json({message:"Welcone to Data API"},{response:"Success"});
 })
 
-app.post("/users",(req,res)=>{
-    let body = req.body;
+
+
+
+
+app.post("/players",(req,res)=>{
+    const body = req.body;
     res.send(body)
 })
 
