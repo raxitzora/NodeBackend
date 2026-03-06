@@ -1,81 +1,30 @@
-import express from "express"
+import dns from "dns";
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import connectDB from "./config/db.js";
+import authRouter from "./routes/auth.routes.js";
 
 const app = express();
+const port = process.env.PORT || 4000;
 
-app.use(express.json());
+app.use(express.json())
+app.use("/api",authRouter)
 
-let users = [
-  {
-    "id": 1,
-    "name": "Alice Johnson",
-    "email": "alice.johnson@company.com",
-    "department": "Engineering",
-    "position": "Senior Software Engineer",
-    "salary": 95000,
-    "joinDate": "2020-03-15",
-    "status": "active"
-  },
-  {
-    "id": 2,
-    "name": "Bob Martinez",
-    "email": "bob.martinez@company.com",
-    "department": "Marketing",
-    "position": "Marketing Manager",
-    "salary": 78000,
-    "joinDate": "2019-07-22",
-    "status": "active"
-  },
-  {
-    "id": 3,
-    "name": "Clara Smith",
-    "email": "clara.smith@company.com",
-    "department": "Human Resources",
-    "position": "HR Specialist",
-    "salary": 62000,
-    "joinDate": "2021-11-01",
-    "status": "active"
-  },
-  {
-    "id": 4,
-    "name": "David Lee",
-    "email": "david.lee@company.com",
-    "department": "Finance",
-    "position": "Financial Analyst",
-    "salary": 72000,
-    "joinDate": "2018-05-10",
-    "status": "inactive"
-  },
-  {
-    "id": 5,
-    "name": "Eva Patel",
-    "email": "eva.patel@company.com",
-    "department": "Engineering",
-    "position": "DevOps Engineer",
-    "salary": 88000,
-    "joinDate": "2022-01-17",
-    "status": "active"
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
   }
-]
+};
 
-app.get("/users",(req,res)=>{
-    res.send(users)
-})
-
-app.get("/users/:id",(req,res)=>{
-    const id = req.params.id
-    console.log(id);
-    res.json(users.find(user=>user.id==id))
-})
-
-app.get("/search",(req,res)=>{
-    res.send("Hello");
-})
-
-
-
-
-
-
-
-app.listen(3000, () => {});
-  console.log("Server is running on port 3000");
+startServer();
