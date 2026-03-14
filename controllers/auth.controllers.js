@@ -32,6 +32,8 @@ export const signUp = async (req,res)=>{
         })
 
 
+        
+
         return res.status(201).json({user:{
             firstName,
             lastName,
