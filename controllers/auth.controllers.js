@@ -24,12 +24,21 @@ export const signUp = async (req,res)=>{
             userName
         })
 
+        const token = generateToken(user._id)
+        res.cookie("token",token,{
+            httpOnly:true,
+            secure:process.env.NODE_ENVIRONMENT ==production,
+            samesite:"strict"
+        })
+
+
+
         return res.status(201).json({user:{
             firstName,
             lastName,
             email,
             userName
-        }})
+        },token})
 
 
         
